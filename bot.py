@@ -1,6 +1,8 @@
 from config import Config
 import logging
 import twitter
+import random
+import time
 
 
 class Bot:
@@ -42,10 +44,52 @@ class Bot:
             logging.critical(e)
             logging.critical('not able to authenticate!')
 
+    def follow_back(self):
+        followers = self.api.GetFollowers()
+        for f in followers:
+            if not f.following:
+                self.api.CreateFriendship(f.id)
+                welcome = '@' + f.screen_name + ' thanks for the follow, ' + f.name + '!'
+                self.api.PostUpdate(welcome)
+
+    def retweet_from_trends(self, woeID=False):
+        if woeID:
+            trends = self.api.GetTrendsWoeid(woeID)
+        else:
+            trends = self.api.GetTrendsCurrent()
+
+        trend = random.choice(trends)
+
+
+        results = self.api.GetSearch(trend.name)
+        tweet = random.choice(results)
+
+        retweets = self.api.GetRetweets(tweet.id)
+        for r in retweets:
+            if r.user.id == self.user.id:
+                logging.info('Already retweetet %s %s', tweet.text, tweet.id)
+                return False
+        self.api.PostRetweet(tweet.id)
+        logging.info('Retweetet %s %s', tweet.text, tweet.id)
+
+        #if not tweet.isFavoritedbyMe():
+        #    if random.random() > 0.5:
+        #        self.api.CreateFavorite(tweet)
+        #        logging.info('Liked %s', tweet.text)
 
 def main():
-    b = Bot()
+    iteration = 0
+    b = Bot('settings_private.cfg')
     b.authenticate()
+    while True:
+        logging.debug('Starting %s iteration', iteration)
+        iteration += 1
+        b.follow_back()
+        b.retweet_from_trends(638242)
+        wait_time = random.randint(430, 1000)
+
+        logging.debug('waiting %s seconds...', wait_time)
+        time.sleep(wait_time)
 
 
 if  __name__ =='__main__':main()
