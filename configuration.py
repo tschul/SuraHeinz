@@ -1,5 +1,6 @@
-from config import Config
 import logging as l
+
+from config import Config
 
 class Settings:
     _cfg = dict()

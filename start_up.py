@@ -6,11 +6,23 @@ import random
 
 def run_iteration(b, cfg, iteration):
 
-    if iteration % cfg.follow_back_step == 0:
-        b.follow_back()
+    if cfg.follow_back_step > 0 and iteration % cfg.follow_back_step == 0:
+        try:
+            b.follow_back()
+        except Exception, e:
+            l.critical(e)
 
-    if iteration % cfg.retweet_from_trends == 0:
-        b.retweet_from_trends(638242)  # Germany
+    if cfg.retweet_from_trends > 0 and iteration % cfg.retweet_from_trends == 0:
+        try:
+            b.retweet_from_trends(638242)  # Germany
+        except Exception, e:
+            l.critical(e)
+
+    if cfg.reddit_search_and_pick > 0 and iteration % cfg.reddit_search_and_pick == 0:
+        try:
+            b.tweet_rand_reddit(cfg.reddit_subreddit, cfg.reddit_query)
+        except Exception, e:
+            l.critical(e)
 
 
 def main():

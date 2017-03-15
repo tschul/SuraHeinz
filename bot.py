@@ -2,14 +2,18 @@ import logging as l
 import twitter
 import random
 
+from reddit import Reddit_PRAW
 
 class Bot:
     user = dict()
     twitter = object
+    reddit = object
     cfg = dict()
 
     def __init__(self, config):
         self.cfg = config
+        self.reddit = Reddit_PRAW(config)
+        self.reddit.authenticate()
 
     def authenticate(self):
         try:
@@ -58,3 +62,8 @@ class Bot:
                 l.info('>>> Liked %s', tweet.text)
             except Exception, e:
                 l.info('>>> Tried to fave already faved tweet %s %s', tweet.text, tweet.id)
+
+    def tweet_rand_reddit(self, subreddit, query):
+        r = self.reddit.search_and_pick(subreddit, query)
+        text = self.reddit.generate_tweet(r)
+        self.twitter.PostUpdate(text)
