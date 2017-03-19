@@ -1,0 +1,13 @@
+# /lib/systemd/system/suraheinz.service
+
+[Unit]
+Description=Twitter Bot SuraHeinz
+After=multi-user.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/SuraHeinz
+ExecStart=/usr/bin/python /root/SuraHeinz/start_up.py > /var/log/suraheinz.log
+
+[Install]
+WantedBy=multi-user.target
