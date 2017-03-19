@@ -12,6 +12,12 @@ def run_iteration(b, cfg, iteration):
         except Exception, e:
             l.critical(e)
 
+    if cfg.unfollow_step > 0 and iteration % cfg.unfollow_step == 0:
+        try:
+            b.unfollow_non_followers()
+        except Exception, e:
+            l.critical(e)
+
     if cfg.retweet_from_trends > 0 and iteration % cfg.retweet_from_trends == 0:
         try:
             b.retweet_from_trends(638242)  # Germany
@@ -30,7 +36,7 @@ def main():
     b = Bot(cfg)
     b.authenticate()
 
-    iteration = 0
+    iteration = 1
     while True:
         logging.debug('\n\nStarting %s iteration\n', iteration)
 

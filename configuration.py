@@ -21,7 +21,7 @@ class Settings:
             quit()
 
     def config_logging(self):
-        l.basicConfig(filename=self._cfg.log_file,
+        l.basicConfig(  #filename=self._cfg.log_file,
                       level=self._cfg.log_level,
                       format='%(' + self._cfg.log_time + ')s %(message)s')
 

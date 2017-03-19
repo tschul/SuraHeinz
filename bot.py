@@ -33,8 +33,18 @@ class Bot:
         for f in followers:
             if not f.following:
                 self.twitter.CreateFriendship(f.id)
+                l.info('>>> Followed ' + f.name)
                 welcome = '@' + f.screen_name + ' thanks for the follow, ' + f.name + '!'
                 self.twitter.PostUpdate(welcome)
+
+    def unfollow_non_followers(self):
+        followers = self.twitter.GetFollowers()
+        following = self.twitter.GetFriends()
+
+        for f in following:
+            if f not in followers:
+                self.twitter.DestroyFriendship(f.id)
+                l.info('>>> Unfollowed ' + f.name)
 
     def retweet_from_trends(self, woeID=False):
         if woeID:
