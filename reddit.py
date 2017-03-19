@@ -30,5 +30,8 @@ class Reddit_PRAW:
         return random.choice(r)
 
     def generate_tweet(self, r):
-        return r.title + ' ' + r.url + ' ' + r.shortlink
+        text = r.title
+        if len(text) >= 92:
+           text = text[:89] + '...' 
+        return text + ' ' + r.url + ' ' + r.shortlink
 
