@@ -1,7 +1,6 @@
 import logging as l
 import twitter
 import random
-
 from reddit import Reddit_PRAW
 
 class Bot:
@@ -77,3 +76,18 @@ class Bot:
         r = self.reddit.search_and_pick(subreddit, query)
         text = self.reddit.generate_tweet(r)
         self.twitter.PostUpdate(text)
+
+    def tweet_reddit_based_on_trends(self):
+        trends = self.twitter.GetTrendsCurrent()
+        random.shuffle(trends)
+
+        for t in trends:
+            query = ''.join(c for c in t.query.lower() if c.islower())
+            r = self.reddit.search_and_pick('all', query)
+            if r:
+                text = self.reddit.generate_tweet(r)
+                self.twitter.PostUpdate(text)
+                l.info('>>> Tweeted: ' + text)
+                break
+
+

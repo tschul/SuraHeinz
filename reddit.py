@@ -23,15 +23,22 @@ class Reddit_PRAW:
 
     def search_and_pick(self, subreddit, query):
         res_gen = self.reddit.subreddit(subreddit).search(query)
+
         r = dict()
-        for idx, res in enumerate(res_gen):
-            r[idx] = res
+        try:
+            for idx, res in enumerate(res_gen):
+                r[idx] = res
+        except Exception, e:
+            return None
+        if r:
+            return random.choice(r)
+        else:
+            return None
 
-        return random.choice(r)
-
-    def generate_tweet(self, r):
+    @staticmethod
+    def generate_tweet(r):
         text = r.title
         if len(text) >= 92:
-           text = text[:89] + '...' 
+            text = text[:89] + '...'
         return text + ' ' + r.url + ' ' + r.shortlink
 

@@ -20,13 +20,19 @@ def run_iteration(b, cfg, iteration):
 
     if cfg.retweet_from_trends > 0 and iteration % cfg.retweet_from_trends == 0:
         try:
-            b.retweet_from_trends(638242)  # Germany
+            b.retweet_from_trends(cfg.trend_location)  # Germany
         except Exception, e:
             l.critical(e)
 
     if cfg.reddit_search_and_pick > 0 and iteration % cfg.reddit_search_and_pick == 0:
         try:
             b.tweet_rand_reddit(cfg.reddit_subreddit, cfg.reddit_query)
+        except Exception, e:
+            l.critical(e)
+
+    if cfg.tweet_reddit_based_on_trends > 0 and iteration % cfg.tweet_reddit_based_on_trends == 0:
+        try:
+            b.tweet_reddit_based_on_trends()
         except Exception, e:
             l.critical(e)
 
@@ -42,7 +48,7 @@ def main():
 
         run_iteration(b, cfg, iteration)
 
-        wait_time = random.randint(cfg.cycle_wait_time * 0.8,
+        wait_time = random.randint(int(cfg.cycle_wait_time * 0.8),
                                    cfg.cycle_wait_time)
 
         logging.debug('waiting %s seconds...', wait_time)
