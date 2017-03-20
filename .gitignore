@@ -1,3 +1,4 @@
 .gitignore
 *.pyc
-settings_private.cfg
+.settings_private.cfg
+*.log
