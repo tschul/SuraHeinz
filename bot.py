@@ -40,10 +40,12 @@ class Bot:
         followers = self.twitter.GetFollowers()
         following = self.twitter.GetFriends()
 
+        random.shuffle(following)
         for f in following:
             if f not in followers:
                 self.twitter.DestroyFriendship(f.id)
                 l.info('>>> Unfollowed ' + f.name)
+                break
 
     def retweet_from_trends(self, woeID=False):
         if woeID:
@@ -89,5 +91,18 @@ class Bot:
                 self.twitter.PostUpdate(text)
                 l.info('>>> Tweeted: ' + text)
                 break
+
+    def find_new_friend_on_trends(self):
+        trends = self.twitter.GetTrendsCurrent()
+        t = random.choice(trends)
+        results = self.twitter.GetSearch(t.query)
+        for r in results:
+            volatility = float(r.user.friends_count) / r.user.followers_count
+            if volatility > 1:
+                self.twitter.CreateFriendship(r.user.id)
+                l.info('>>> Followed ' + r.name)
+
+
+
 
 

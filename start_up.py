@@ -36,6 +36,11 @@ def run_iteration(b, cfg, iteration):
         except Exception, e:
             l.critical(e)
 
+    if cfg.find_friend_on_trends > 0 and iteration % cfg.find_friend_on_trends == 0:
+        try:
+            b.find_new_friend_on_trends()
+        except Exception, e:
+            l.critical(e)
 
 def main():
     cfg = Settings('settings_private.cfg').get_config()
@@ -44,7 +49,7 @@ def main():
 
     iteration = 1
     while True:
-        logging.debug('\n\nStarting %s iteration\n', iteration)
+        logging.debug('\n\nStarting iteration %s\n', iteration)
 
         run_iteration(b, cfg, iteration)
 
