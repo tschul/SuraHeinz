@@ -8,46 +8,51 @@ from src.configuration import *
 
 def run_iteration(b, cfg, iteration):
 
-    if cfg.follow_back_step > 0 and iteration % cfg.follow_back_step == 0:
+    if cfg.follow_back_step > 0 and \
+       iteration % cfg.follow_back_step == 0:
         try:
-            b.follow_back()
+            b.twitter.follow_back()
         except Exception, e:
             l.critical(e)
 
-    if cfg.unfollow_step > 0 and iteration % cfg.unfollow_step == 0:
+    if cfg.unfollow_step > 0 and \
+       iteration % cfg.unfollow_step == 0:
         try:
-            b.unfollow_non_followers()
+            b.twitter.unfollow_non_followers()
         except Exception, e:
             l.critical(e)
 
-    if cfg.retweet_from_trends > 0 and iteration % cfg.retweet_from_trends == 0:
+    if cfg.retweet_from_trends > 0 and \
+       iteration % cfg.retweet_from_trends == 0:
         try:
-            b.retweet_from_trends(cfg.trend_location)  # Germany
+            b.twitter.retweet_from_trends(cfg.trend_location)  # Germany
         except Exception, e:
             l.critical(e)
 
-    if cfg.reddit_search_and_pick > 0 and iteration % cfg.reddit_search_and_pick == 0:
+    if cfg.reddit_search_and_pick > 0 and \
+       iteration % cfg.reddit_search_and_pick == 0:
         try:
             b.tweet_rand_reddit(cfg.reddit_subreddit, cfg.reddit_query)
         except Exception, e:
             l.critical(e)
 
-    if cfg.tweet_reddit_based_on_trends > 0 and iteration % cfg.tweet_reddit_based_on_trends == 0:
+    if cfg.tweet_reddit_based_on_trends > 0 and \
+       iteration % cfg.tweet_reddit_based_on_trends == 0:
         try:
             b.tweet_reddit_based_on_trends()
         except Exception, e:
             l.critical(e)
 
-    if cfg.find_friend_on_trends > 0 and iteration % cfg.find_friend_on_trends == 0:
+    if cfg.find_friend_on_trends > 0 and \
+       iteration % cfg.find_friend_on_trends == 0:
         try:
-            b.find_new_friend_on_trends()
+            b.twitter.find_new_friend_on_trends()
         except Exception, e:
             l.critical(e)
 
 def main():
     cfg = Settings('settings/settings_private.cfg').get_config()
     b = Bot(cfg)
-    b.authenticate()
 
     iteration = 1
     while True:

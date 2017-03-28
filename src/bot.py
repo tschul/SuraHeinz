@@ -2,12 +2,12 @@ import logging as l
 import random
 
 from src.reddit import Reddit_PRAW
-from src.twitter import Twitter
+from src.twitter_api import Twitter
 
 
 class Bot:
     user = dict()
-
+    twitter = object
     reddit = object
     cfg = dict()
 
@@ -15,7 +15,7 @@ class Bot:
         self.cfg = config
         self.reddit = Reddit_PRAW(config)
         self.reddit.authenticate()
-        self.twitter = Twitter()
+        self.twitter = Twitter(config)
         self.twitter.authenticate()
 
     def tweet_rand_reddit(self, subreddit, query):

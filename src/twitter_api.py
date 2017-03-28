@@ -1,3 +1,8 @@
+import logging as l
+import twitter
+import random
+
+
 class Twitter:
 
     api = object
@@ -74,4 +79,4 @@ class Twitter:
             volatility = float(r.user.friends_count) / r.user.followers_count
             if volatility > 1:
                 self.api.CreateFriendship(r.user.id)
-                l.info('>>> Followed ' + r.name)
+                l.info('>>> Followed ' + r.user.name)
