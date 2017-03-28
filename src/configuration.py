@@ -11,10 +11,6 @@ class Settings:
         self.read_settings()
         l.info('Settings read from ' + self._filename)
 
-        self._filename = self._cfg.tokens_file
-        self.read_settings()
-        self.config_logging()
-
     def read_settings(self):
         try:
             f = file(self._filename)
