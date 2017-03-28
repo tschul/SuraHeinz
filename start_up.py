@@ -1,8 +1,10 @@
-from configuration import *
-from bot import Bot
 import logging
-import time
 import random
+import time
+
+from src.bot import Bot
+from src.configuration import *
+
 
 def run_iteration(b, cfg, iteration):
 
@@ -43,7 +45,7 @@ def run_iteration(b, cfg, iteration):
             l.critical(e)
 
 def main():
-    cfg = Settings('settings_private.cfg').get_config()
+    cfg = Settings('settings/settings_private.cfg').get_config()
     b = Bot(cfg)
     b.authenticate()
 

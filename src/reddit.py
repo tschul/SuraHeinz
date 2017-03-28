@@ -38,7 +38,7 @@ class Reddit_PRAW:
     @staticmethod
     def generate_tweet(r):
         text = r.title
-        if len(text) >= 92:
+        if len(text) >= 116:
             text = text[:89] + '...'
-        return text + ' ' + r.url + ' ' + r.shortlink
+        return text + ' ' + r.url
 
