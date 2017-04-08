@@ -6,49 +6,25 @@ from src.bot import Bot
 from src.configuration import *
 
 
-def run_iteration(b, cfg, iteration):
+def run_iteration(b, cfg, i):
+    perform_action(i, cfg.follow_back_step,              b.twitter.follow_back)
+    perform_action(i, cfg.unfollow_step,                 b.twitter.unfollow_non_followers)
+    perform_action(i, cfg.retweet_from_trends,           b.twitter.retweet_from_trends, cfg.trend_location)
+    perform_action(i, cfg.reddit_search_and_pick,        b.tweet_rand_reddit, cfg.reddit_subreddit, cfg.reddit_query)
+    perform_action(i, cfg.tweet_reddit_based_on_trends,  b.tweet_reddit_based_on_trends)
+    perform_action(i, cfg.find_friends_on_trends,        b.twitter.find_new_friend_on_trends)
 
-    if cfg.follow_back_step > 0 and \
-       iteration % cfg.follow_back_step == 0:
-        try:
-            b.twitter.follow_back()
-        except Exception, e:
-            l.critical(e)
 
-    if cfg.unfollow_step > 0 and \
-       iteration % cfg.unfollow_step == 0:
-        try:
-            b.twitter.unfollow_non_followers()
-        except Exception, e:
-            l.critical(e)
+def perform_action(iteration, param, func, *args):
+    if not param > 0:
+        return
+    if iteration % param != 0:
+        return
+    try:
+        func(*args)
+    except Exception, e:
+        l.critical(e)
 
-    if cfg.retweet_from_trends > 0 and \
-       iteration % cfg.retweet_from_trends == 0:
-        try:
-            b.twitter.retweet_from_trends(cfg.trend_location)  # Germany
-        except Exception, e:
-            l.critical(e)
-
-    if cfg.reddit_search_and_pick > 0 and \
-       iteration % cfg.reddit_search_and_pick == 0:
-        try:
-            b.tweet_rand_reddit(cfg.reddit_subreddit, cfg.reddit_query)
-        except Exception, e:
-            l.critical(e)
-
-    if cfg.tweet_reddit_based_on_trends > 0 and \
-       iteration % cfg.tweet_reddit_based_on_trends == 0:
-        try:
-            b.tweet_reddit_based_on_trends()
-        except Exception, e:
-            l.critical(e)
-
-    if cfg.find_friend_on_trends > 0 and \
-       iteration % cfg.find_friend_on_trends == 0:
-        try:
-            b.twitter.find_new_friend_on_trends()
-        except Exception, e:
-            l.critical(e)
 
 def main():
     cfg = Settings('settings/settings_private.cfg').get_config()
