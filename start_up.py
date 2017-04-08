@@ -13,7 +13,7 @@ def run_iteration(b, cfg, i):
     perform_action(i, cfg.retweet_from_trends,           b.twitter.retweet_from_trends, cfg.trend_location)
     perform_action(i, cfg.reddit_search_and_pick,        b.tweet_rand_reddit, cfg.reddit_subreddit, cfg.reddit_query)
     perform_action(i, cfg.tweet_reddit_based_on_trends,  b.tweet_reddit_based_on_trends)
-    perform_action(i, cfg.find_friends_on_trends,        b.twitter.find_new_friend_on_trends)
+    perform_action(i, cfg.find_friend_on_trends,         b.twitter.find_new_friend_on_trends)
 
 
 def main():
