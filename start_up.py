@@ -4,6 +4,7 @@ import time
 
 from src.bot import Bot
 from src.configuration import *
+from src.utils import perform_action
 
 
 def run_iteration(b, cfg, i):
@@ -15,23 +16,15 @@ def run_iteration(b, cfg, i):
     perform_action(i, cfg.find_friends_on_trends,        b.twitter.find_new_friend_on_trends)
 
 
-def perform_action(iteration, param, func, *args):
-    if not param > 0:
-        return
-    if iteration % param != 0:
-        return
-    try:
-        func(*args)
-    except Exception, e:
-        l.critical(e)
-
-
 def main():
     cfg = Settings('settings/settings_private.cfg').get_config()
     b = Bot(cfg)
 
     iteration = 1
     while True:
+        # read config every iteration from disk so that we can change parameters without restart
+        cfg = Settings('settings/settings_private.cfg').get_config()
+
         logging.debug('\n\nStarting iteration %s\n', iteration)
 
         run_iteration(b, cfg, iteration)
