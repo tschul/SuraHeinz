@@ -3,7 +3,7 @@ import random
 import time
 
 from src.bot import Bot
-from src.configuration import *
+from src.configuration import Settings
 from src.utils import perform_action
 
 
@@ -37,5 +37,5 @@ def main():
         iteration += 1
 
 
-if  __name__ == '__main__':
+if __name__ == '__main__':
     main()
