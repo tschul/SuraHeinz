@@ -22,6 +22,9 @@ class Reddit_PRAW:
             l.critical('Cannot authenticate at Reddit!')
 
     def search_and_pick(self, subreddit, query):
+        if ',' in query:
+            query = random.choice(cfg.reddit_query.split(','))
+
         res_gen = self.reddit.subreddit(subreddit).search(query)
 
         r = dict()
