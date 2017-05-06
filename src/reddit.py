@@ -1,47 +1,34 @@
-import praw
 import random
-import logging as l
+from src.utils import authenticate_reddit
 
-class Reddit_PRAW:
-    cfg = dict()
-    reddit = object
+
+class RedditPRAW:
+    _cfg = dict()
+    _reddit = object
 
     def __init__(self, config):
-        self.cfg = config
-
-    def authenticate(self):
-        try:
-            self.reddit = praw.Reddit(client_id=self.cfg.reddit_client_id,
-                                      client_secret=self.cfg.reddit_client_secret,
-                                      password=self.cfg.reddit_password,
-                                      user_agent=self.cfg.reddit_user_agent,
-                                      username=self.cfg.reddit_username)
-            self.reddit.read_only = True
-        except Exception, e:
-            l.critical(e)
-            l.critical('Cannot authenticate at Reddit!')
+        self._cfg = config
+        self._reddit = authenticate_reddit(self._cfg)
 
     def search_and_pick(self, subreddit, query):
+<<<<<<< HEAD
         if ',' in query:
             query = random.choice(cfg.reddit_query.split(','))
 
         res_gen = self.reddit.subreddit(subreddit).search(query)
 
+=======
+        res_gen = self._reddit.subreddit(subreddit).search(query)
+>>>>>>> 1af9ce7281874b1ecca48153e2eca0946d93d979
         r = dict()
+
         try:
             for idx, res in enumerate(res_gen):
                 r[idx] = res
-        except Exception, e:
+        except Exception:
             return None
         if r:
             return random.choice(r)
         else:
             return None
-
-    @staticmethod
-    def generate_tweet(r):
-        text = r.title
-        if len(text) >= 116:
-            text = text[:89] + '...'
-        return text + ' ' + r.url
 

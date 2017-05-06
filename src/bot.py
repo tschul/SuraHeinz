@@ -1,8 +1,10 @@
 import logging as l
 import random
 
-from src.reddit import Reddit_PRAW
+from src.reddit import RedditPRAW
 from src.twitter_api import Twitter
+
+from src.utils import authenticate_reddit, generate_tweet_from_reddit
 
 
 class Bot:
@@ -13,14 +15,13 @@ class Bot:
 
     def __init__(self, config):
         self.cfg = config
-        self.reddit = Reddit_PRAW(config)
-        self.reddit.authenticate()
+        self.reddit = RedditPRAW(config)
         self.twitter = Twitter(config)
         self.twitter.authenticate()
 
     def tweet_rand_reddit(self, subreddit, query):
         r = self.reddit.search_and_pick(subreddit, query)
-        text = self.reddit.generate_tweet(r)
+        text = generate_tweet_from_reddit(r)
         self.twitter.api.PostUpdate(text)
 
     def tweet_reddit_based_on_trends(self):
@@ -31,7 +32,7 @@ class Bot:
             query = ''.join(c for c in t.query.lower() if c.islower())
             r = self.reddit.search_and_pick('all', query)
             if r:
-                text = self.reddit.generate_tweet(r)
+                text = generate_tweet_from_reddit(r)
                 self.twitter.api.PostUpdate(text)
                 l.info('>>> Tweeted: ' + text)
                 break

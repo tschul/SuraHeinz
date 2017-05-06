@@ -1,5 +1,5 @@
 import logging as l
-from config import Config
+from src.utils import read_settings, config_logging
 
 
 class Settings:
@@ -8,23 +8,8 @@ class Settings:
 
     def __init__(self, filename='settings/settings_private.cfg'):
         self._filename = filename
-        self.read_settings()
-        l.info('Settings read from ' + self._filename)
-
-    def read_settings(self):
-        try:
-            f = file(self._filename)
-            self._cfg = Config(f)
-        except Exception, e:
-            l.critical(e)
-            l.critical('No settings read from %s. Exiting.', self.filename)
-            quit()
-
-    def config_logging(self):
-        l.basicConfig(filename=self._cfg.log_file,
-                      level=self._cfg.log_level,
-                      format='%(' + self._cfg.log_time + ')s %(message)s')
-
+        self._cfg = read_settings(filename)
+        config_logging(self._cfg)
         l.info('Settings read from ' + self._filename)
 
     def get_config(self):
