@@ -14,7 +14,7 @@ class RedditPRAW:
         if ',' in query:
             query = random.choice(cfg.reddit_query.split(','))
 
-        res_gen = self.reddit.subreddit(subreddit).search(query)
+        res_gen = self._reddit.subreddit(subreddit).search(query)
 
         r = dict()
         try:
